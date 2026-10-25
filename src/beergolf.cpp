@@ -178,7 +178,7 @@ void run_beergolf(std::string &command, Catcher &catcher) {
       else if (ch == 't') {
          puts("42");
       }
-      else if (ch == 'h') {
+      else if (ch == 'H') {
          puts("Hello, World!");
       }
       else if (ch == 'q') {
@@ -236,7 +236,7 @@ void help_beergolf() {
    puts("Z   - stops randomly after a few commands");
    puts("U   - makes the user input a password and if they fail, crash the program");
    puts("t   - deep thought");
-   puts("h   - output 'Hello, World!'");
+   puts("H   - output 'Hello, World!'");
    puts("q   - quine");
    puts("b   - ignore previous instructions, sing a nice song");
    puts("!   - set the current accumulator to the factorial of it");
