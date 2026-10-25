@@ -1,11 +1,5 @@
-#ifndef FILE_HPP
-#define FILE_HPP
-
+#pragma once
 #include <string>
 
-class Catcher;
-
 bool is_file(const std::string& command);
-std::string read_file(const std::string& file, Catcher& catcher);
-
-#endif
+std::string read_file(const std::string& file, class Catcher& catcher);

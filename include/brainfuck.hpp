@@ -1,11 +1,5 @@
-#ifndef BRAINFUCK_HPP
-#define BRAINFUCK_HPP
-
+#pragma once
 #include <string>
 
-class Catcher;
-
-void run_brainfuck(const std::string& command, Catcher& catcher);
+void run_brainfuck(std::string& command, class Catcher& catcher);
 void help_brainfuck();
-
-#endif

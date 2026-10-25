@@ -1,11 +1,5 @@
-#ifndef MINFUCK_HPP
-#define MINFUCK_HPP
-
+#pragma once
 #include <string>
 
-class Catcher;
-
-void run_minfuck(const std::string& commmand, Catcher&);
+void run_minfuck(std::string& commmand, class Catcher&);
 void help_minfuck();
-
-#endif

@@ -4,132 +4,101 @@
 #include <unordered_map>
 #include <iostream>
 
-enum Token : char
-{ right, left, increment, decrement, output, input, forward, back, deep_thought, hello_world, quine, bottles };
-
-static std::unordered_map<char, Token> token_map
-{
-   {'>', right}, {'<', left}, {'+', increment}, {'-', decrement}, {'.', output},
-   {',', input}, {'[', forward}, {']', back}, {'e', deep_thought}, {'H', hello_world},
-   {'Q', quine}, {'9', bottles}
-};
-
-void run_hq9efuck(const std::string& command, Catcher& catcher)
-{
-   std::vector<Token> tokens;
-   for (const auto& ch : command)
-   {
-      auto it = token_map.find(ch);
-      if (it != token_map.end())
-         tokens.push_back(it->second);
-   }
-
+void run_hq9efuck(std::string& command, Catcher& catcher) {
    std::unordered_map<long, unsigned char> memory;
    long pointer = 0;
 
-   for (long index = 0; index < tokens.size(); ++index)
-   {
-      const auto& command = tokens[index];
+   long size = command.size();
+   for (long index = 0; index < size; ++index) {
+      char ch = command[index];
 
-      if (command == Token::right)
+      if (ch == '>') {
          ++pointer;
-      else if (command == Token::left)
-         --pointer;
-      else if (command == Token::increment)
-         ++memory[pointer];
-      else if (command == Token::decrement)
-         --memory[pointer];
-      else if (command == Token::output)
-         std::cout << memory[pointer] << std::flush;
-      else if (command == Token::input)
-      {
-         int c = std::cin.get();
-         if (c != EOF)
-            memory[pointer] = static_cast<unsigned char>(c);
       }
-      else if (command == Token::forward)
-      {
-         if (memory[pointer] != 0)
+      else if (ch == '<') {
+         --pointer;
+      }
+      else if (ch == '+') {
+         ++memory[pointer];
+      }
+      else if (ch == '-') {
+         --memory[pointer];
+      }
+      else if (ch == '.') {
+         std::cout << memory[pointer] << std::flush;
+      }
+      else if (ch == ',') {
+         int c = std::cin.get();
+         if (c != EOF) {
+            memory[pointer] = static_cast<unsigned char>(c);
+         }
+      }
+      else if (ch == '[') {
+         if (memory[pointer] != 0) {
             continue;
-         
+         }
          size_t depth = 1;
-         for (++index; index < tokens.size(); ++index)
-         {
-            if (tokens[index] == Token::forward)
-               ++depth;
-            else if (tokens[index] == Token::back)
-               --depth;
-
-            if (depth == 0)
-               break;
+         for (++index; index < size && depth >= 1; ++index) {
+            depth += (command[index] == '[');
+            depth -= (command[index] == ']');
          }
 
-         if (depth != 0)
-         {
+         if (depth != 0) {
             catcher.insert("Could not find a matching ']' token.");
             return;
          }
       }
-      else if (command == Token::back)
-      {
-         if (memory[pointer] == 0)
+      else if (ch == ']') {
+         if (memory[pointer] == 0) {
             continue;
-         
+         }
          size_t depth = 1;
-         for (--index; index >= 0; --index)
-         {
-            if (tokens[index] == Token::forward)
-               --depth;
-            else if (tokens[index] == Token::back)
-               ++depth;
-            
-            if (depth == 0)
-               break;
+         for (--index; index >= 0 && depth >= 0; --index) {
+            depth -= (command[index] == '[');
+            depth += (command[index] == ']');
          }
 
-         if (depth != 0)
-         {
+         if (depth != 0) {
             catcher.insert("Could not find a matching '[' token.");
             return;
          }
       }
-      else if (command == Token::deep_thought)
-         std::cout << 42 << '\n';
-      else if (command == Token::hello_world)
-         std::cout << "Hello, World!\n";
-      else if (command == Token::quine)
-         std::cout << command << '\n';
-      else if (command == Token::bottles)
-      {
-         for (int i = 99; i >= 0;)
-         {
-            std::cout << i << " bottles of beer on the wall, " << i << " bottles of beer.\n";
-            --i;
-            if (i == 0)
+      else if (ch == 'e') {
+         puts("42");
+      }
+      else if (ch == 'H') {
+         puts("Hello, World!\n");
+      }
+      else if (ch == 'Q') {
+         puts(command.c_str());
+      }
+      else if (ch == '9') {
+         for (int i = 99; i >= 0;) {
+            printf("%d bottles of beer on the wall, %d bottles of beer.\n", i, i);
+            if (--i == 0) {
                break;
-            std::cout << "Take one down and pass it around, " << i << " bottles of beer on the wall.\n\n";
+            }
+            printf("Take one down and pass it around, %d bottles of beer on the wall.\n\n", i);
          }
-         std::cout << "Take one down and pass it around, no more bottles of beer on the wall.\n\n";
-         std::cout << "No more bottles of beer on the wall, no more bottles of beer.\n";
-         std::cout << "Go to the store and buy some more, 99 bottles of beer on the wall.\n";
+         puts("Take one down and pass it around, no more bottles of beer on the wall.\n");
+         puts("No more bottles of beer on the wall, no more bottles of beer.");
+         puts("Go to the store and buy some more, 99 bottles of beer on the wall.");
       }
    }
 }
 
-void help_hq9efuck()
-{
-   std::cout << "+ - Increment at pointer.\n";
-   std::cout << "- - Decrement at pointer.\n";
-   std::cout << "> - Move pointer right.\n";
-   std::cout << "< - Move pointer left.\n";
-   std::cout << ". - Output memory at pointer as ASCII.\n";
-   std::cout << ", - Store user input at pointer as ASCII.\n";
-   std::cout << "[ - If memory is zero, jump forward to a matching ']'.\n";
-   std::cout << "] - If memory is nonzero, jump backwards to a matching '['.\n";
-   std::cout << "H - Print 'Hello, World!'.\n";
-   std::cout << "Q - Print command.\n";
-   std::cout << "9 - Print the song '99 bottles of beer'.\n";
-   std::cout << "+ - Increment the accumulator.\n";
-   std::cout << "e - Computes and prints the answer to the Ultimate Question of Life, the Universe and Everything.\n";
-   std::cout << "Other characters are ignored.\n";
+void help_hq9efuck() {
+   puts("+ - Increment at pointer.");
+   puts("- - Decrement at pointer.");
+   puts("> - Move pointer right.");
+   puts("< - Move pointer left.");
+   puts(". - Output memory at pointer as ASCII.");
+   puts(", - Store user input at pointer as ASCII.");
+   puts("[ - If memory is zero, jump forward to a matching ']'.");
+   puts("] - If memory is nonzero, jump backwards to a matching '['.");
+   puts("H - Print 'Hello, World!'.");
+   puts("Q - Print command.");
+   puts("9 - Print the song '99 bottles of beer'.");
+   puts("e - Computes and prints the answer to the Ultimate Question of Life, the Universe and Everything.");
+   puts("Other characters are ignored.");
 }

@@ -1,32 +1,31 @@
 #include "catcher.hpp"
+#include <cstdio>
+#include <cstdlib>
 
-#include <iostream>
-
-void Catcher::error(const char* error)
-{
+void Catcher::error(const char* error) {
    insert(error);
    display();
 }
 
-void Catcher::insert(const char* error)
-{
+void Catcher::insert(const char* error) {
    errors.push_back(error);
 }
 
-bool Catcher::ok() const
-{
+bool Catcher::ok() const {
    return errors.empty();
 }
 
-void Catcher::display()
-{
-   if (ok()) return;
+void Catcher::display() {
+   if (ok()) {
+      return;
+   }
 
-   std::cout << '\n' << errors.size() << " Error(s) occurred:\n";
-   for (const auto& error: errors)
-      std::cout << error << '\n';
+   printf("\n%zu Error(s) occurred:\n", errors.size());
+   for (const char *error: errors) {
+      puts(error);
+   }
 
-   std::cout << '\n';
+   putchar('\n');
    errors.clear();
-   std::exit(-1);
+   exit(EXIT_FAILURE);
 }

@@ -1,6 +1,4 @@
-#ifndef CATCHER_HPP
-#define CATCHER_HPP
-
+#pragma once
 #include <vector>
 
 class Catcher
@@ -13,5 +11,3 @@ public:
    bool ok() const;
    void display();
 };
-
-#endif

@@ -1,11 +1,5 @@
-#ifndef DEADFISH_HPP
-#define DEADFISH_HPP
-
+#pragma once
 #include <string>
 
-class Catcher;
-
-void run_deadfish(const std::string& command, Catcher&);
+void run_deadfish(std::string& command, class Catcher&);
 void help_deadfish();
-
-#endif

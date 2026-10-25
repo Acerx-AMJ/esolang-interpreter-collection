@@ -1,12 +1,6 @@
-#ifndef LANGUAGES_HPP
-#define LANGUAGES_HPP
-
+#pragma once
 #include <string>
 
-class Catcher;
-
-void handle_command(const std::string& language, const std::string& command, Catcher& catcher);
-void handle_help(const std::string& language, Catcher& catcher);
-void run(const std::string& language, const std::string& command, Catcher& catcher);
-
-#endif
+void handle_command(const std::string& language, std::string& command, class Catcher& catcher);
+void handle_help(const std::string& language, class Catcher& catcher);
+void run(const std::string& language, std::string& command, class Catcher& catcher);

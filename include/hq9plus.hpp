@@ -1,11 +1,5 @@
-#ifndef HQ9PLUS_HPP
-#define HQ9PLUS_HPP
-
+#pragma once
 #include <string>
 
-class Catcher;
-
-void run_hq9plus(const std::string& command, Catcher&);
+void run_hq9plus(std::string& command, class Catcher&);
 void help_hq9plus();
-
-#endif
